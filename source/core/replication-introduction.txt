@@ -33,7 +33,7 @@ Replication in MongoDB
 A replica set is a group of :program:`mongod` instances that host the
 same data set. One :program:`mongod`, the primary, receives all write
 operations. All other instances, secondaries, apply operations from
-the primary so that they have the same data set.
+the primary so that they eventually have the same data set.
 
 The **primary** accepts all write operations from clients. Replica set
 can have only one primary. Because only one member can accept write

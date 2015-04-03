@@ -1,0 +1,121 @@
+=======================
+MongoDB Fault Tolerance
+=======================
+
+.. default-domain:: mongodb
+
+MongoDB is an open-source database that provides high performance and
+automatic scaling to teams that require a reliable and well-supported
+foundation. The ultimate purpose of a database is to take in data and retain it
+for future consumption. While some domain-specific applications may accept
+trade-offs, most developers expect an all-purpose enterprise-grade database
+such as MongoDB to reliably hold their data even in the face of a hostile
+network or hardware environment.
+
+The fault tolerance requirement is a multifaceted problem requiring multiple
+layers of robustness. In MongoDB, :term:`replica sets <replica set>` are the
+basis for fault tolerance, but a developer should understand
+:term:`write concerns <write concern>`, and how to handle different failure
+scenarios in the application layer.
+
+Replica Sets
+------------
+
+Description
+~~~~~~~~~~~
+
+:term:`Replica sets <replica set>` are the cornerstone of any distributed
+database's safety guarantees, and they are a fully first-class feature of
+MongoDB.
+
+A replica set is a group of :program:`mongod` instances that host the
+same data set. The :term:`primary` :program:`mongod` receives all read and
+write operations, and distributes them to the :term:`secondary` instances so
+that they eventually have the same data set.
+
+.. include:: /images/replica-set-primary-with-two-secondaries.rst
+
+Replica sets provide resilience in the face of catastrophic failure
+
+Multi-Datacenter Deployments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Read Uncommitted
+~~~~~~~~~~~~~~~~
+
+MongoDB's replication model allows for uncommitted reads. Consider the following
+scenario:
+
+An application starts a write operation ``W``. The application then reads the
+result of ``W``, but before ``W`` gets replicated to other replica set members,
+the replica set :term:`primary` fails. This causes the subsequent
+:term:`failover` to roll back ``W``.
+
+At this point, the application has read a value that was never fully committed,
+and that later disappeared.
+
+Write Concerns
+--------------
+
+:ref:`Write concerns <write-concern-operation>` allow a developer to specify
+exactly what fault-tolerance guarantees MongoDB should provide, by requiring a
+write to reach a certain threshold of safety before the :term:`driver` considers
+it complete.
+
+MongoDB's default behavior only requires that the replica set primary
+acknowledge a write operation. This may be a weaker guarantee than some
+applications may require.
+
+.. include:: /includes/fact-majority-write-concern.rst
+
+Failure Scenarios
+-----------------
+
+Write Failure
+~~~~~~~~~~~~~
+
+When working with data of any consequence, your application should always handle
+any errors that arise from a failed write. Errors can occur for a number of
+reasons, such as a network failure between the client application and the
+server, or if the write occurs during the election period of a :term:`failover`
+and the :term:`replica set` has not yet chosen a new :term:`primary`.
+
+While the MongoDB server will handle these conditions gracefully, the language
+:term:`drivers <driver>` leave handling these errors to the application because
+there is no one approach that fits all use cases. In many cases, a write may
+have actually succeeded despite a network error.
+
+For example, suppose that an application is sending nonessential debugging
+logs to a replica set when the primary fails. Automatically retrying the writes
+indefinitely would lead to increased load while writes build up. In this case,
+it may be best to simply drop the failed writes.
+
+In general, as data becomes higher-volume and lower-importance, this action
+becomes more acceptable.
+
+However, an application will frequently wish to intelligently retry a failed
+write. In this case, you can repeat the write with the same ``_id`` field. If
+this raises a duplicate ``_id`` exception, then the previous write had actually
+succeeded.
+
+When inserting a new document with this error-recovery strategy, you should
+explicitly generate a new :bsontype:`ObjectId <data_oid>` and use that as the
+``_id`` field.  For example, the following :program:`mongo` shell code repeats a
+write operation, but it will not result in a duplicate document.
+
+.. code-block:: javascript
+
+   var _id = new ObjectId()
+   db.pets.save({_id: _id, name: "Fluffy"})
+   db.pets.save({_id: _id, name: "Fluffy"})
+
+Read Failures
+~~~~~~~~~~~~~
+
+A read error is generally a more straightforward failure case for an
+application. Because a read has no side-effects, you can typically repeat it.
+
+However, an application developer should be aware that in the case of a
+:term:`failover` where the repeated query is against a different
+:program:`mongod` than the first read, then the query may return a different
+data set.

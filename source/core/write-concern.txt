@@ -129,6 +129,8 @@ write operation propagates to additional members of the replica set.
 See :doc:`Write Concern for Replica Sets <replica-set-write-concern>`
 for more information.
 
+.. include:: /includes/fact-majority-write-concern.rst
+
 .. include:: /images/crud-write-concern-w2.rst
 
 .. include:: /includes/note-write-concern-journaled-replication.rst
