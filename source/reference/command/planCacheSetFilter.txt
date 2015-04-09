@@ -37,6 +37,26 @@ Definition
    do not persist after shutdown; however, you can also clear existing
    index filters using the :dbcommand:`planCacheClearFilters` command.
 
+.. _plancache-sharding-and-sorting:
+
+Sharding and Sorting
+--------------------
+
+For a sharded collection, a query with a sort sent through a
+:program:`mongos` will always include the sort key in each shard's list of
+:term:`projected <project>` fields. Including the sort key allows the
+:program:`mongos` instance to merge together the results from each shard in
+sorted order. Consequently, the queries delivered to shards via
+:program:`mongos` may have a different projection than that specified
+by the user.
+
+.. note::
+
+   Include any sorting key in the index filter's ``projection`` field if the
+   query will project fields from a sharded cluster. This ensures that the
+   index filter's query shape correctly anticipates changes performed by
+   :program:`mongos` to the projection.
+
 Required Access
 ---------------
 
@@ -87,10 +107,13 @@ method.
 Set Filter on Query Shape Consisting of Predicate, Projection, and Sort
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+No Sharding
+```````````
+
 The following example creates an index filter for the ``orders``
 collection. The filter applies to queries whose predicate is an
-equality match on the ``item`` field, where only the ``quantity`` field
-is projected and an ascending sort by ``order_date`` is specified.
+equality match on the ``item`` field, projecting only the ``quantity`` field,
+and sorting in ascending order by ``order_date``.
 
 .. code-block:: javascript
 
@@ -108,6 +131,29 @@ is projected and an ascending sort by ``order_date`` is specified.
 
 For the query shape, the query optimizer will only consider indexed
 plans which use the index ``{ item: 1, order_date: 1, quantity: 1 }``.
+
+Sharding
+````````
+
+If ``orders`` is a sharded collection, then you should include the
+sort field ``order_date`` in the list of projected fields as discussed in
+:ref:`plancache-sharding-and-sorting`.
+
+The following example adds the missing fields to the projection.
+
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+         planCacheSetFilter: "orders",
+         query: { item: "ABC" },
+         projection: { quantity: 1, order_date: 1, _id: 0 },
+         sort: { order_date: 1 },
+         indexes: [
+            { item: 1, order_date: 1 , quantity: 1 }
+         ]
+      }
+   )
 
 .. seealso::
    :dbcommand:`planCacheClearFilters`,

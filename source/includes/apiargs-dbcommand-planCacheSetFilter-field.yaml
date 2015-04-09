@@ -10,9 +10,9 @@ type: string
 ---
 arg_name: field
 description: |
-  The query predicate associated with the index filter. Together with
-  the ``sort`` and the ``projection``, the ``query`` predicate make up
-  the :term:`query shape` for the specified index filter.
+  The query predicate associated with the index filter.
+  The query predicate, sort specification, and projection together comprise the
+  query shape associated with the index filter.
 
   Only the structure of the predicate, including the field names, are
   significant; the values in the query predicate are
