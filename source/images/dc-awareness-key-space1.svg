@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="620" height="140" viewBox="0, 0, 620, 140">
+  <g id="Layer_1">
+    <g>
+      <g>
+        <path d="M10,10 L610,10 L610,80 L10,80 L10,10 z" fill="#1F76C0"/>
+        <path d="M210.5,10.5 L210.5,80.5" fill-opacity="0" stroke="#CCE3F1" stroke-width="1" stroke-dasharray="2,2"/>
+        <path d="M410.5,10.5 L410.5,80.5" fill-opacity="0" stroke="#CCE3F1" stroke-width="1" stroke-dasharray="2,2"/>
+      </g>
+      <g>
+        <path d="M22.3,92.441 L598.7,89.559" fill-opacity="0" stroke="#1F76C0" stroke-width="2"/>
+        <path d="M22.282,88.841 L12.7,92.489 L22.318,96.041 z" fill="#1F76C0" fill-opacity="1" stroke="#1F76C0" stroke-width="2" stroke-opacity="1"/>
+        <path d="M598.718,93.159 L608.3,89.511 L598.682,85.959 z" fill="#1F76C0" fill-opacity="1" stroke="#1F76C0" stroke-width="2" stroke-opacity="1"/>
+      </g>
+      <text transform="matrix(1, 0, 0, 1, 300.789, 108.5)">
+        <tspan x="-48.926" y="7.5" font-family="GillSans" font-size="24" fill="#1F76C0">Key Space</tspan>
+      </text>
+      <text transform="matrix(1, 0, 0, 1, 100.242, 47)">
+        <tspan x="-37.242" y="7.5" font-family="GillSans" font-size="24" fill="#FFFFFF">London</tspan>
+      </text>
+      <text transform="matrix(1, 0, 0, 1, 300.789, 47)">
+        <tspan x="-47.789" y="7.5" font-family="GillSans" font-size="24" fill="#FFFFFF">New York</tspan>
+      </text>
+      <text transform="matrix(1, 0, 0, 1, 499.691, 47)">
+        <tspan x="-33.691" y="7.5" font-family="GillSans" font-size="24" fill="#FFFFFF">Sydney</tspan>
+      </text>
+    </g>
+  </g>
+</svg>

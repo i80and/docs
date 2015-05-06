@@ -163,7 +163,7 @@ shards. But random distribution makes it more likely that a range query
 on the shard key will not be able to target a few shards but would more
 likely query every shard in order to return a result.
 
-Customized Data Distribution with Tag Aware Sharding
+Data Center Awareness & Customized Data Distribution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 MongoDB allows administrators to direct the balancing policy using
@@ -175,8 +175,8 @@ of data that the tags describe.
 
 Tags are the primary mechanism to control the behavior of the balancer
 and the distribution of chunks in a cluster.  Most commonly, tag aware
-sharding serves to improve the locality of data for sharded clusters
-that span multiple data centers.
+sharding serves to pin data to specific servers for local reads and writes
+in a multi-data center application.
 
 See :doc:`/core/tag-aware-sharding` for more information.
 

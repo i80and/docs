@@ -19,4 +19,9 @@ description: |
   Presents solutions to common issues and concerns relevant to the
   administration and use of sharded clusters. Refer to
   :doc:`/faq/diagnostics` for general diagnostic information.
+---
+file: /tutorial/data-center-awareness
+description: |
+  Demonstrates how to use :ref:`tag-aware-sharding` to implement data center
+  awareness.
 ...

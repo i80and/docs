@@ -69,4 +69,9 @@ level: 1
 source:
   file: toc-sharded-cluster-tutorials-landing.yaml
   ref: /tutorial/troubleshoot-sharded-clusters
+---
+level: 1
+source:
+  file: toc-sharded-cluster-tutorials-landing.yaml
+  ref: /tutorial/data-center-awareness
 ...

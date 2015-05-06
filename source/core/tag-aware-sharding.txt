@@ -30,7 +30,7 @@ Considerations
 - :term:`Hash-based sharding <hashed shard key>` only supports
   tag-aware sharding on an entire collection.
 
-- .. include:: /includes/fact-shard-ranges-inclusive-exclusive.rst 
+- .. include:: /includes/fact-shard-ranges-inclusive-exclusive.rst
 
 .. _shards-tag-sets:
 
@@ -57,3 +57,4 @@ Once configured, the balancer respects tag ranges during future
 
    :doc:`/tutorial/administer-shard-tags`
 
+   :doc:`/tutorial/data-center-awareness`

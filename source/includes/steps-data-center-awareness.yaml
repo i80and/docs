@@ -1,0 +1,198 @@
+stepnum: 1
+title:
+  text: Deploy a sharded cluster
+level: 4
+ref: deploy-sharded
+pre: |
+   Deploy a 3 shard cluster: one shard for each region. See
+   :ref:`sharding-procedure-setup`.
+---
+stepnum: 2
+title:
+  text: Enable sharding for the database
+level: 4
+ref: shard-database
+pre: |
+  Connect a :program:`mongo` shell to your :program:`mongos`, and use
+  :method:`sh.enableSharding()` to enable sharding for the ``users`` database.
+action:
+  language: javascript
+  code: |
+      sh.enableSharding("users")
+---
+title:
+  text: Tag each shard to a region
+level: 4
+stepnum: 3
+ref: tag-each-shard
+pre: |
+  Each shard should be assigned to a particular region value.
+
+action:
+  - pre: |
+      Find the ID's of your shards. To find your shard ID's, connect to
+      :program:`mongos` and run the following:
+
+    language: javascript
+    code: |
+      db.getSiblingDB("admin").runCommand( { listShards: 1 } )
+    post: |
+      This will return an object containing a list of shards:
+
+      .. code-block:: javascript
+
+         {
+           "shards" : [
+             {
+               "_id" : "shard0000",
+               "host" : "localhost:27017"
+             },
+             {
+               "_id" : "shard0001",
+               "host" : "localhost:27018"
+             },
+             {
+               "_id" : "shard0002",
+               "host" : "localhost:27019"
+             }
+           ],
+           "ok" : 1
+         }
+
+  - pre: |
+      Now assign each shard to its region. Note that you can assign multiple
+      shards to the same region tag.
+
+    language: javascript
+    code: |
+      sh.addShardTag("shard0000", "nyc")
+      sh.addShardTag("shard0001", "london")
+      sh.addShardTag("shard0002", "sydney")
+---
+title:
+  text: Shard the collection
+level: 4
+stepnum: 4
+ref: tag-collection
+pre: |
+  Each user profile document must have a field indicating the user's region.
+  For example, the documents stored in the ``profiles`` collection could
+  contain a ``region`` field used as part of a :ref:`sharding-shard-key`, as in
+  the following document:
+
+  .. code-block:: javascript
+
+    {
+      "_id" : ObjectId("553a9ceca1b2d8a842ab7a84"),
+      "region" : "nyc",
+      "username" : "samuel"
+    }
+
+  Data should be sharded by a :ref:`compound key <index-type-compound>` to
+  ensure that an adequate number of chunks are created. The first field in the
+  compound shard key must specify the region in which the data should live. See
+  :ref:`sharding-shard-key` for details on choosing a shard key.
+
+  If the data is solely sharded by location, the key is not granular enough
+  to allow for :ref:`appropriate chunking <sharding-shard-key-cardinality>`
+  resulting in unbalanced chunks that cannot be readily migrated.
+
+  For example, the following shard key specifies the region as the first value,
+  and includes document ``_id`` as the second value, making the shard key
+  unique:
+
+  .. code-block:: javascript
+
+     sh.shardCollection( "users.profiles", { "region" : 1, "_id" : 1 } )
+---
+title:
+  text: Assign tag ranges
+level: 4
+stepnum: 5
+ref: assign-ranges
+pre: |
+   The final step is to assign documents to live in their respective shards. In
+   a sharded system, documents are grouped into chunks, and those chunks are
+   distributed over multiple shards. By using tags, its possible to assign chunk
+   ranges to live on specific shards. See :ref:`tag-aware-sharding`.
+
+   To understand how tags work, think about all possible values that you might
+   wish to assign tags to. In this case, you want to assign tags to ranges that
+   represent our regions. These ranges are:
+
+   - all documents that have a region of "London"
+   - all documents that have a region of "New York"
+   - all documents that have a region of "Sydney"
+
+   This can be visualized in the diagram below:
+
+   .. include:: /images/dc-awareness-key-space1.rst
+
+   In MongoDB it is possible to define a lower bound named ``MinKey`` and an
+   upper bound called ``MaxKey`` that represent the lowest and highest values in
+   the system, respectively.
+
+   We can visualize this in the diagram below:
+
+   .. include:: /images/dc-awareness-key-space2.rst
+
+   Use the :method:`sh.addTagRange()` shell method to declare your tag ranges.
+   In the following commands, the second argument specifies the minimum shard
+   key and is inclusive, while the third argument specifies the maximum shard
+   key and is exclusive:
+
+   .. code-block:: javascript
+
+      sh.addTagRange("users.profiles", { region: "london"  }, { region: "nyc" }, "london")
+      sh.addTagRange("users.profiles", { region: "nyc"  }, { region: "sydney" }, "nyc")
+      sh.addTagRange("users.profiles", { region: "sydney"  }, { region: MaxKey }, "sydney")
+
+   These ranges ensure the following:
+
+   - All documents that have a region of ``london`` are stored in the London
+     shard.
+   - All documents that have a region of ``nyc`` are stored in the NYC shard.
+   - All documents that have a region of ``sydney`` are stored in the Sydney
+     shard.
+
+---
+title:
+  text: Check that the ranges are properly assigned
+level: 4
+stepnum: 6
+ref: check-ranges
+pre: |
+   Once data has been inserted into the collection, it is possible to check if
+   the chunks are distributed as expected by querying the config database on the
+   :program:`mongos`:
+
+   .. code-block:: javascript
+
+      use config
+      db.chunks.find( { ns: "users.profiles" },
+                      { _id: 0, "min.region": 1, "max.region": 1, shard:1 }
+                    ).sort( { "min.region": 1 } )
+
+   Check the that the min and max ranges of each chunk are correct, and that the
+   chunk is assigned to the correct shard:
+
+   .. code-block:: javascript
+
+      { "min" : { "region" : { "$minKey" : 1 } }, "max" : { "region" : "london" }, "shard" : "shard0001" }
+      { "min" : { "region" : "london" }, "max" : { "region" : "london" }, "shard" : "shard0001" }
+      { "min" : { "region" : "london" }, "max" : { "region" : "london" }, "shard" : "shard0001" }
+      { "min" : { "region" : "london" }, "max" : { "region" : "london" }, "shard" : "shard0001" }
+      { "min" : { "region" : "london" }, "max" : { "region" : "nyc" }, "shard" : "shard0001" }
+      { "min" : { "region" : "nyc" }, "max" : { "region" : "nyc" }, "shard" : "shard0000" }
+      { "min" : { "region" : "nyc" }, "max" : { "region" : "nyc" }, "shard" : "shard0000" }
+      { "min" : { "region" : "nyc" }, "max" : { "region" : "nyc" }, "shard" : "shard0000" }
+      { "min" : { "region" : "nyc" }, "max" : { "region" : "sydney" }, "shard" : "shard0000" }
+      { "min" : { "region" : "sydney" }, "max" : { "region" : "sydney" }, "shard" : "shard0002" }
+      { "min" : { "region" : "sydney" }, "max" : { "region" : "sydney" }, "shard" : "shard0002" }
+      { "min" : { "region" : "sydney" }, "max" : { "region" : { "$maxKey" : 1 } }, "shard" : "shard0002" }
+
+   This output shows that all ranges of chunks have the correct min and max
+   ranges, and that they are assigned to the correct shards - NYC chunks on
+   ``shard0000``, London chunks on ``shard0001``, and Sydney chunks on
+   ``shard0001``.
+...

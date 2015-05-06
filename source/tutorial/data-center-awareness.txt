@@ -1,0 +1,30 @@
+.. _data-center-awareness-tutorial:
+
+==============================
+Data Center Awareness Tutorial
+==============================
+
+.. default-domain:: mongodb
+
+This guide demonstrates configuring a MongoDB cluster for
+:ref:`data-center-awareness` by configuring a sharded cluster to store data
+locally for users in London, New York and Sydney.
+
+This application uses a London shard to store all London user profiles; a New
+York shard to store all New York City user profiles; and a Sydney shard to
+store all Sydney user profiles.
+
+.. include:: /includes/steps/data-center-awareness.rst
+
+Summary
+-------
+
+This tutorial has demonstrated how to store user profiles in shards based on
+region. This is a basic example, but you can adapt it to achieve pinning data to
+more or fewer regions, or even for tagging shards as being for analytics or
+real time queries.
+
+You can do more configuration for advanced deployments. Shards can have multiple
+shard tags, and tag ranges can change as frequently as desired. Tags can also
+span more than a single shard if there is a need to have multiple shards using
+the same tag.

@@ -624,4 +624,48 @@ output:
   - type: web
     dpi: 72
     width: 700
+---
+name: dc-awareness-pinning
+alt: "Diagram of a cluster configured to pin certain data to specific regions."
+output:
+  - type: print
+    tag: 'print'
+    dpi: 300
+    width: 2100
+  - type: web
+    dpi: 72
+    width: 600
+---
+name: dc-awareness-high-availability
+alt: "Diagram of a cluster configured to provide availability acrowss multiple regions."
+output:
+  - type: print
+    tag: 'print'
+    dpi: 300
+    width: 2100
+  - type: web
+    dpi: 72
+    width: 600
+---
+name: dc-awareness-key-space1
+alt: "Diagram showing a tag range."
+output:
+  - type: print
+    tag: 'print'
+    dpi: 300
+    width: 2100
+  - type: web
+    dpi: 72
+    width: 400
+---
+name: dc-awareness-key-space2
+alt: "Diagram showing a tag range, with MinKey and MaxKey."
+output:
+  - type: print
+    tag: 'print'
+    dpi: 300
+    width: 2100
+  - type: web
+    dpi: 72
+    width: 400
 ...

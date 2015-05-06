@@ -1,34 +1,73 @@
+.. _data-center-awareness:
+
 =====================
 Data Center Awareness
 =====================
 
 .. default-domain:: mongodb
 
-MongoDB provides a number of features that allow application
-developers and database administrators to customize the behavior of a
-:term:`sharded cluster` or :term:`replica set` deployment so that
-MongoDB may be *more* "data center aware," or allow operational
-and location-based separation.
+Modern SaaS applications have global audiences that require globally distributed
+data to work effectively. When users access an application from all over the
+world, you should keep compute and data resources as close as possible to the
+end users. A European user requesting North American resources can dramatically
+increase application latency, creating a poor user experience.
 
-MongoDB also supports segregation based
-on functional parameters, to ensure that certain :program:`mongod`
-instances are only used for reporting workloads or that certain
-high-frequency portions of a sharded collection only exist on specific
-shards.
+In order to minimize latency, the user should be accessing data contained in
+their local region's data center.
 
-The following documents, *found either in this section or other sections
-of this manual*, provide information on customizing a deployment for
-operation- and location-based separation:
+What Is Data Center Awareness?
+------------------------------
 
-.. include:: /includes/toc/dfn-list-spec-data-center-awareness.rst
+You can configure MongoDB to be data center aware. This means it is possible to
+store, or "pin", a subset of your data to a particular server or set of
+servers. For example, you can use data center awareness to implement the
+following requirements:
 
-.. include:: /includes/toc/data-center-awareness.rst
+- **Rack awareness:** pinning data to certain racks,
 
-Further Reading
----------------
+- **Location awareness:** pinning data to certain locations,
 
-- The :doc:`/core/write-concern` and :doc:`/core/read-preference`
-  documents, which address capabilities related to data center
-  awareness.
+- **Tiered storage:** assigning frequently-accessed data to faster storage
+  devices such as :term:`SSDs <SSD>`, and the rest of the data to spinning
+  disks.
 
-- :doc:`/tutorial/deploy-geographically-distributed-replica-set`.
+Deployment strategies
+---------------------
+
+You can deploy MongoDB's data center awareness in multiple configurations.
+
+Region Pinning
+~~~~~~~~~~~~~~
+
+Data must reside in a specific region and may not leave that region.
+
+This configuration gives high availability within a single region and pins
+data to a region. This ensures that data and its replica copies are all
+contained within a single region.
+
+In the event that the primary node fails, there are replicas available within
+the region to provide redundancy. In the event that the entire data center
+loses availability, local users will have no servers available to service their
+request.
+
+.. include:: /images/dc-awareness-pinning.rst
+
+Distributed Availability
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Users access data from the local data center giving them local reads and
+writes. A local replica is available in the event that the primary loses
+availability. In the event the entire local data center is unreachable, users
+are able to access data from a new primary in a remote data center.
+
+.. include:: /images/dc-awareness-high-availability.rst
+
+Configuring Data Center Awareness
+---------------------------------
+
+See the :ref:`data-center-awareness-tutorial` for a guide on configuring data
+center awareness.
+
+.. seealso::
+
+   .. include:: /includes/toc/dfn-list-spec-data-center-awareness.rst
