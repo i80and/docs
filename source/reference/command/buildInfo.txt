@@ -89,11 +89,11 @@ Output
 
 .. data:: buildInfo.javascriptEngine
 
-   .. versionchanged:: 2.4
+   .. versionchanged:: 3.2
 
    A string that reports the JavaScript engine used in the
-   :program:`mongod` instance. By default, this is ``V8`` after
-   version 2.4, and ``SpiderMonkey`` before 2.4.
+   :program:`mongod` instance. By default since MongoDB 3.2, this is ``mozjs``.
+   Previously it was ``V8``.
 
 .. data:: buildInfo.bits
 
