@@ -1,0 +1,52 @@
+#  This file borrows content from other files, including
+#  /includes/options-shared.yaml,
+#  which uses {{program}} to refer to the tool.
+#
+program: mongobiuser
+name: help
+inherit:
+  name: help
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongobiuser
+name: host
+aliases: -h
+args: <hostname>
+default: |
+  localhost
+directive: option
+description: |
+  Specifies the resolvable hostname or socket path on which the Business
+  Intelligence Server is listening.
+optional: false
+---
+program: mongobiuser
+name: port
+aliases: -p
+args: <port>
+default: |
+  27032
+directive: option
+description: |
+  Specifies the TCP port on which the Business Intelligence Server is listening.
+optional: false
+---
+program: mongobiuser
+name: password
+aliases: -W
+args: <password>
+directive: option
+description: |
+  Specifies a password with which to authenticate with the Business
+  Intelligence Server. If the server requires a password but this option is not
+  specified, {{program}} will prompt for a password.
+optional: true
+---
+program: mongobiuser
+name: no-password
+inherit:
+  name: no-password
+  program: _shared
+  file: options-shared.yaml
+...

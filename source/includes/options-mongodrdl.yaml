@@ -1,0 +1,124 @@
+#  This file borrows content from other files, including
+#  /includes/options-shared.yaml,
+#  which uses {{program}} to refer to the tool.
+#
+program: mongodrdl
+name: username
+inherit:
+  name: username
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongodrdl
+name: password
+inherit:
+  name: password
+  program: _shared
+  file: options-shared.yaml
+description: |
+  Specifies a password with which to authenticate to a MongoDB database
+  that uses authentication. Use in conjunction with the ``--username`` and
+  ``--authenticationDatabase`` options.
+---
+program: mongodrdl
+name: help
+inherit:
+  name: help
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongodrdl
+name: version
+inherit:
+  name: version
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongodrdl
+name: host
+inherit:
+  name: host
+  program: _shared
+  file: options-shared.yaml
+description: |
+  Specifies a resolvable hostname for the :program:`mongod` to which to
+  connect. By default, the {{program}} attempts to connect to a MongoDB
+  instance running on the localhost on port number ``27017``.
+
+  To connect to a replica set, specify the
+  :setting:`~replication.replSetName` and a seed list of set members, as in
+  the following:
+
+  .. code-block:: none
+
+     <replSetName>/<hostname1><:port>,<hostname2><:port>,<...>
+
+  You can always connect directly to a single MongoDB instance by
+  specifying the host and port number directly.
+---
+program: mongodrdl
+name: port
+inherit:
+  name: port
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongodrdl
+name: authenticationDatabase
+inherit:
+  name: authenticationDatabase
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongodrdl
+name: authenticationMechanism
+inherit:
+  name: _authenticationMechanism
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongodrdl
+name: db
+aliases: -d
+directive: option
+args:  <database>
+description: |
+  Specifies a database from which to generate a ``.drdl`` schema file. If you
+  do not specify a database, :program:`mongodrdl` uses all databases in the
+  instance.
+optional: true
+---
+program: mongodrdl
+name: collection
+aliases: -c
+directive: option
+args: <collection>
+description: |
+  Specifies a collection from which to generate a ``.drdl`` schema file.
+  If you do not specify a collection, this option will use all collections in
+  the specified database or instance.
+optional: true
+---
+program: mongodrdl
+name: customFilterField
+aliases: -f
+directive: option
+args: <name>
+description: |
+  Specifies the field name to add for a custom MongoDB filter.
+
+optional: true
+---
+program: mongodrdl
+name: out
+aliases: -o
+directive: option
+args: <path>
+default: |
+  Standard out.
+description: |
+  Specifies the path where :program:`mongodrdl` will write the schema file. To
+  send the schema to standard output, specify "``-``" instead of
+  a path.
+optional: true
+...

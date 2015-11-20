@@ -1,0 +1,59 @@
+=============
+``mongodrdl``
+=============
+
+.. default-domain:: mongodb
+
+.. only:: html
+
+   .. meta::
+      :description: The mongodrdl command man page.
+      :keywords: mongodrdl, mongodb, man page
+
+Description
+-----------
+
+.. only:: (not man)
+
+   .. binary:: mongodrdl
+
+.. include:: /includes/fact-bi-enterprise.rst
+
+:program:`mongodrdl` produces a schema based on contents of one or more
+:program:`mongod` :term:`collections <collection>` and writes them out into
+``.drdl`` files understood by :program:`mongobischema`.
+
+Options
+-------
+
+Core Options
+~~~~~~~~~~~~
+
+.. program:: mongodrdl
+
+.. include:: /includes/option/option-mongodrdl-help.rst
+
+.. include:: /includes/option/option-mongodrdl-version.rst
+
+.. include:: /includes/option/option-mongodrdl-host.rst
+
+.. include:: /includes/option/option-mongodrdl-port.rst
+
+.. include:: /includes/option/option-mongodrdl-username.rst
+
+.. include:: /includes/option/option-mongodrdl-password.rst
+
+.. include:: /includes/option/option-mongodrdl-db.rst
+
+.. include:: /includes/option/option-mongodrdl-collection.rst
+
+.. include:: /includes/option/option-mongodrdl-customFilterField.rst
+
+.. include:: /includes/option/option-mongodrdl-out.rst
+
+Authentication Options
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /includes/option/option-mongodrdl-authenticationDatabase.rst
+
+.. include:: /includes/option/option-mongodrdl-authenticationMechanism.rst

@@ -1,0 +1,90 @@
+===============
+``mongobiuser``
+===============
+
+.. default-domain:: mongodb
+
+.. only:: html
+
+   .. meta::
+      :description: The mongobiuser command man page.
+      :keywords: mongobiuser, mongodb, man page
+
+Description
+-----------
+
+.. only:: (not man)
+
+   .. binary:: mongobiuser
+
+.. include:: /includes/fact-bi-enterprise.rst
+
+:program:`mongobiuser` allows you to create, drop, and list users within a
+MongoDB Business Intelligence Server running on the same host.
+
+There must be at least one user created in order for Business Intelligence
+Server to function.
+
+:program:`mongobiuser` has several subcommands that perform different actions:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Command
+     - Arguments
+     - Description
+
+   * - ``mongobiuser create``
+
+     - ``[create-flags] [username] [url]``
+
+     - Creates a new user in the Business Intelligence server and associate them
+       with the corresponding MongoDB :ref:`connection string <mongodb-uri>`.
+
+   * - ``mongobiuser drop``
+
+     - ``[username]``
+
+     - Delete the given ``[username]`` and all data associated with them from
+       the Business Intelligence server.
+
+   * - ``mongobiuser list``
+
+     -
+
+     - List all users in the Business Intelligence server.
+
+Examples
+--------
+
+To create a user ``brad`` associated with a three-member MongoDB replica set
+running on ``localhost`` while specifying a
+:readmode:`secondary read preference <secondary>`, you can run the following
+command:
+
+.. code-block:: sh
+
+   mongobiuser create brad \
+               'mongodb://localhost:27017,localhost:27018,localhost:27019/?readPreference=secondary'
+
+
+Options
+-------
+
+Core Options
+~~~~~~~~~~~~
+
+.. program:: mongobiuser
+
+.. include:: /includes/option/option-mongobiuser-help.rst
+
+.. include:: /includes/option/option-mongobiuser-host.rst
+
+.. include:: /includes/option/option-mongobiuser-port.rst
+
+Create Options
+~~~~~~~~~~~~~~
+
+.. include:: /includes/option/option-mongobiuser-no-password.rst
+
+.. include:: /includes/option/option-mongobiuser-password.rst

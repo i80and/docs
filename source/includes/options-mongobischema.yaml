@@ -1,0 +1,46 @@
+#  This file borrows content from other files, including
+#  /includes/options-shared.yaml,
+#  which uses {{program}} to refer to the tool.
+#
+program: mongobischema
+name: help
+inherit:
+  name: help
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongobischema
+name: host
+inherit:
+  name: host
+  program: mongobiuser
+  file: options-mongobiuser.yaml
+---
+program: mongobischema
+name: port
+inherit:
+  name: port
+  program: mongobiuser
+  file: options-mongobiuser.yaml
+---
+program: mongobischema
+name: password
+inherit:
+  name: password
+  program: mongobiuser
+  file: options-mongobiuser.yaml
+---
+program: mongobischema
+name: no-password
+inherit:
+  name: no-password
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongobischema
+name: drop
+directive: option
+description: |
+  Drops all of the databases tables.
+optional: true
+...

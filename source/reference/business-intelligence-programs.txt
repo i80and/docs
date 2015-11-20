@@ -1,0 +1,22 @@
+========================================
+MongoDB Business Intelligence Components
+========================================
+
+.. default-domain:: mongodb
+
+.. include:: /includes/fact-bi-enterprise.rst
+
+MongoDB provides a suite of tools for working with business intelligence
+applications.
+
+:program:`mongodrdl` generates database schema information for use with the
+upcoming Business Intelligence Connector. :program:`mongobischema` will load the
+resulting files into the Business Intelligence Server. :program:`mongobiuser`
+can modify users in the Business Intelligence Server.
+
+.. toctree::
+   :maxdepth: 1
+
+   /reference/program/mongodrdl
+   /reference/program/mongobischema
+   /reference/program/mongobiuser
