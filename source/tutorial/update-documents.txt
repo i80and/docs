@@ -67,6 +67,13 @@ These methods accept as parameters:
 
 - an options document.
 
+.. only:: website
+
+   You can run the methods on this page in the web shell below after
+   inserting the data in :ref:`update-documents-example-collection`:
+
+   .. include:: /includes/fact-mws.rst
+
 Behavior
 --------
 
@@ -112,6 +119,8 @@ operation modifies or replaces the matching document or documents.
 For details on the new document created, see the individual reference
 pages for the methods.
 
+.. _update-documents-example-collection:
+
 Example Collection
 ------------------
 
@@ -125,7 +134,7 @@ the results.
 To populate the ``users`` collection referenced in the examples,
 run the following in :program:`mongo` shell:
 
-.. note:: 
+.. note::
 
    If the ``users`` collection already contains documents with the same
    ``_id`` values, you need to :method:`drop <db.collection.drop()>`
@@ -139,7 +148,7 @@ run the following in :program:`mongo` shell:
         {
           _id: 1,
           name: "sue",
-          age: 19, 
+          age: 19,
           type: 1,
           status: "P",
           favorites: { artist: "Picasso", food: "pizza" },
@@ -147,7 +156,7 @@ run the following in :program:`mongo` shell:
           badges: [ "blue", "black" ],
           points: [
              { points: 85, bonus: 20 },
-             { points: 85, bonus: 10 } 
+             { points: 85, bonus: 10 }
           ]
         },
         {
@@ -161,7 +170,7 @@ run the following in :program:`mongo` shell:
           badges: [ "green" ],
           points: [
              { points: 85, bonus: 20 },
-             { points: 64, bonus: 12 } 
+             { points: 64, bonus: 12 }
           ]
         },
         {
@@ -175,7 +184,7 @@ run the following in :program:`mongo` shell:
           badges: [ "blue", "Picasso" ],
           points: [
              { points: 81, bonus: 8 },
-             { points: 55, bonus: 20 } 
+             { points: 55, bonus: 20 }
           ]
         },
         {
@@ -189,7 +198,7 @@ run the following in :program:`mongo` shell:
           badges: [ "Picasso", "black" ],
           points: [
              { points: 53, bonus: 15 },
-             { points: 51, bonus: 15 } 
+             { points: 51, bonus: 15 }
           ]
         },
         {
@@ -216,7 +225,7 @@ run the following in :program:`mongo` shell:
           badges: [ "black", "blue" ],
           points: [
              { points: 78, bonus: 8 },
-             { points: 57, bonus: 7 } 
+             { points: 57, bonus: 7 }
           ]
         }
       ]
